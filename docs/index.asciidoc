@@ -1,0 +1,112 @@
+:plugin: language
+:type: filter
+
+///////////////////////////////////////////
+START - GENERATED VARIABLES, DO NOT EDIT!
+///////////////////////////////////////////
+:version: %VERSION%
+:release_date: %RELEASE_DATE%
+:changelog_url: %CHANGELOG_URL%
+:include_path: ../../../logstash/docs/include
+///////////////////////////////////////////
+END - GENERATED VARIABLES, DO NOT EDIT!
+///////////////////////////////////////////
+
+[id="plugins-{type}-{plugin}"]
+
+=== Language
+
+include::{include_path}/plugin_header.asciidoc[]
+
+==== Description
+
+
+
+[id="plugins-{type}s-{plugin}-options"]
+==== Language Filter Configuration Options
+
+This plugin supports the following configuration options plus the <<plugins-{type}s-common-options>> described later.
+
+[cols="<,<,<",options="header",]
+|=======================================================================
+|Setting |Input type|Required
+| <<plugins-{type}s-{plugin}-amount_of_chars>> |<<number,number>>|No
+| <<plugins-{type}s-{plugin}-concat_fields>> |<<boolean,boolean>>|No
+| <<plugins-{type}s-{plugin}-concat_prefix>> |<<string,string>>|No
+| <<plugins-{type}s-{plugin}-fields>> |<<array,array>>|No
+|=======================================================================
+
+Also see <<plugins-{type}s-common-options>> for a list of options supported by all
+filter plugins.
+
+&nbsp;
+
+[id="plugins-{type}s-{plugin}-amount_of_chars"]
+===== `amount_of_chars` 
+
+  * Value type is <<number,number>>
+  * Default value is `0`
+
+
+
+[id="plugins-{type}s-{plugin}-concat_fields"]
+===== `concat_fields` 
+
+  * Value type is <<boolean,boolean>>
+  * There is no default value for this setting.
+
+
+
+[id="plugins-{type}s-{plugin}-concat_prefix"]
+===== `concat_prefix` 
+
+  * Value type is <<string,string>>
+  * Default value is `"language"`
+
+
+
+[id="plugins-{type}s-{plugin}-fields"]
+===== `fields` 
+
+  * Value type is <<array,array>>
+  * Default value is `"message"`
+
+This filter is designed to detect the language of a given field or fields
+Example configuration
+------------------------------------
+filter {
+  language {
+    fields => ['message']
+    amount_of_chars => 100
+  }
+}
+-----------------------------------
+
+The 'fields' variable takes 1 or more fields and uses the cld to determine
+the language.
+The 'amount_of_chars' field allows you to specify to run the check only if
+a certain amount of characters are present
+The 'concat_fields' field will create a new field with all fields specified
+in 'fields'
+The 'concat_prefix' field will prefix the field name for concat_fields.  for
+example, the concat field name would look like 'language_en' or 'language_es'
+Example run
+-------------------------------------------------------------------------
+bin/logstash agent -e 'input { stdin { } } filter { language { concat_fields => true } } output { stdout { codec => rubydebug } }'
+Example: "Logstash and logstash-filter-language is awesome"
+-------------------------------------------------------------------------
+
+-------------------------------------------------------------------------
+{
+         "message" => "Logstash and logstash-filter-language is awesome",
+        "@version" => "1",
+   "detected_lang" => "en",
+"lang_reliability" => true,
+     "language_en" => "Logstash and logstash-filter-language is awesome"
+}
+-------------------------------------------------------------------------
+Replace the message with this value.
+
+
+
+include::{include_path}/{type}.asciidoc[]
