@@ -1,5 +1,6 @@
 # encoding: UTF-8
 require "logstash/devutils/rspec/spec_helper"
+require "insist"
 require "logstash/filters/language"
 
 describe LogStash::Filters::Language do
